@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+</head>
+<style>
+    body {
+        background-color: #f5f7fa;
+        color: #212529;
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        background: #e6f1fa;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        max-width: 800px; /* Limit container width for larger screens */
+        margin: auto;
+    }
+
+    .app-header {
+        margin-bottom: 30px;
+    }
+
+    .app-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #343a40;
+    }
+
+    .app-subtitle {
+        font-size: 1.2rem;
+        color: #6c757d;
+    }
+
+    .add-task-button {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .list-group-item {
+        border: none;
+        border-bottom: 1px solid #b3d7f1;
+    }
+
+    .list-group-item:last-child {
+        border-bottom: none;
+    }
+
+    .btn {
+        font-size: 0.9rem;
+        padding: 5px 10px;
+    }
+
+    .btn-primary {
+        background-color: #1e90ff;
+        border-color: #1e90ff;
+    }
+
+    .btn-primary:hover {
+        background-color: #1c86ee;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+    }
+
+    .btn-warning {
+        background-color: #ffcc00;
+        border-color: #ffcc00;
+    }
+
+    .btn-warning:hover {
+        background-color: #e6b800;
+    }
+
+    .btn-danger {
+        background-color: #e74c3c;
+        border-color: #e74c3c;
+    }
+
+    .btn-danger:hover {
+        background-color: #c0392b;
+    }
+
+    h5 {
+        margin-bottom: 5px;
+    }
+
+    p {
+        margin-bottom: 0;
+        color: #495057;
+    }
+
+    /* Media Queries */
+    @media (max-width: 768px) {
+        .app-title {
+            font-size: 2rem;
+        }
+
+        .app-subtitle {
+            font-size: 1rem;
+        }
+
+        .container {
+            padding: 15px;
+        }
+
+        .btn {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+        }
+
+        .list-group-item {
+            flex-direction: column; /* Stack content vertically */
+            align-items: flex-start;
+        }
+
+        .list-group-item .d-flex {
+            flex-direction: column; /* Adjust alignment */
+        }
+
+        .list-group-item div {
+            margin-bottom: 10px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .app-title {
+            font-size: 1.8rem;
+        }
+
+        .app-subtitle {
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            font-size: 0.7rem;
+            padding: 3px 6px;
+        }
+
+        .add-task-button .btn {
+            width: 100%; /* Full-width button for smaller screens */
+        }
+    }
+</style>
+
+<body>
+    <div class="container my-5">
+        <header class="app-header text-center">
+            <h1 class="app-title">To-Do List</h1>
+            <p class="app-subtitle">Organize your tasks efficiently</p>
+        </header>
+
+        <!-- Add Task Button -->
+        <div class="add-task-button">
+            <a href="{% url 'add_task'%}" class="btn btn-primary">+ Add New Task</a>
+        </div>
+
+        <!-- Task List -->
+        <ul class="list-group">
+            {% for task in tasks %}
+            <li class="list-group-item">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="{% if task.completed %}text-decoration-line-through text-muted{% endif %}">
+                            {{ task.title }}
+                            {% if task.completed %}
+                                <span class="text-success ms-2">&#10004;</span> <!-- Checkmark Icon -->
+                            {% endif %}
+                        </h5>
+                        <p class="mb-0">{{ task.description }}</p>
+                    </div>
+                    <div>
+                        {% if not task.completed %}
+                        <a href="{% url 'mark_as_read' task.id %}" class="btn btn-success btn-sm me-2">Mark as Read</a>
+                        {% endif %}
+                        <a href="{% url 'update_task' task.id %}" class="btn btn-warning btn-sm me-2">Edit</a>
+                        <a href="{% url 'delete_task' task.id %}" class="btn btn-danger btn-sm">Delete</a>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
